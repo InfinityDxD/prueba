@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://x1nsx1u3a33u" path="res://player.tscn" id="1_8uh7m"]
 [ext_resource type="PackedScene" uid="uid://bo5u5gb7jx6jh" path="res://world.tscn" id="2_6uqi0"]
+[ext_resource type="PackedScene" uid="uid://rt6rvvxa1lwd" path="res://sword.tscn" id="3_6uqi0"]
 
 [node name="test" type="Node" unique_id=1373848828]
 
@@ -9,3 +10,6 @@
 
 [node name="player" parent="." unique_id=797367852 groups=["jugador"] instance=ExtResource("1_8uh7m")]
 position = Vector2(55, 606)
+
+[node name="sword" parent="." unique_id=406482827 groups=["jugador"] instance=ExtResource("3_6uqi0")]
+position = Vector2(8, 568)

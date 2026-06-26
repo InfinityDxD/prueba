@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://x1nsx1u3a33u"]
 
 [ext_resource type="Texture2D" uid="uid://dr72wnopkiitc" path="res://assets/sprites/player/player.png" id="2_onrkg"]
-[ext_resource type="PackedScene" uid="uid://rt6rvvxa1lwd" path="res://sword.tscn" id="3_i3pqv"]
 
 [sub_resource type="GDScript" id="GDScript_onrkg"]
 resource_local_to_scene = true
@@ -75,7 +74,7 @@ size = Vector2(14, 14)
 
 [node name="player" type="Node2D" unique_id=797367852]
 
-[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=1808943312]
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=1808943312 groups=["jugador"]]
 script = SubResource("GDScript_onrkg")
 
 [node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D" unique_id=102245361]
@@ -87,6 +86,3 @@ shape = SubResource("RectangleShape2D_i3pqv")
 
 [node name="Camera2D" type="Camera2D" parent="CharacterBody2D" unique_id=887283397]
 zoom = Vector2(2, 2)
-
-[node name="sword" parent="CharacterBody2D" unique_id=406482827 instance=ExtResource("3_i3pqv")]
-position = Vector2(-17, -18)
