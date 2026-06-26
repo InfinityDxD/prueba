@@ -75,10 +75,6 @@ size = Vector2(14, 14)
 
 [node name="player" type="Node2D" unique_id=797367852]
 
-[node name="sword" parent="." unique_id=406482827 instance=ExtResource("3_i3pqv")]
-position = Vector2(21, -2)
-rotation = 1.5707964
-
 [node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=1808943312]
 script = SubResource("GDScript_onrkg")
 
@@ -91,3 +87,6 @@ shape = SubResource("RectangleShape2D_i3pqv")
 
 [node name="Camera2D" type="Camera2D" parent="CharacterBody2D" unique_id=887283397]
 zoom = Vector2(2, 2)
+
+[node name="sword" parent="CharacterBody2D" unique_id=406482827 instance=ExtResource("3_i3pqv")]
+position = Vector2(-17, -18)
