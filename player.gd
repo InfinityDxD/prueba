@@ -13,6 +13,7 @@ func _ready() -> void:
 	add_to_group("jugador")  # En _ready() del jugador
 
 func _physics_process(delta: float) -> void:
+	print("JUGADOR: pos=", position, " | gpos=", global_position, " | vel=", velocity)
 	# Guardamos el estado de si estaba en el suelo ANTES de movernos
 	var was_on_floor = is_on_floor()
 	
@@ -44,6 +45,7 @@ func _physics_process(delta: float) -> void:
 			did_jump = true
 	
 	move_and_slide()
+	
 	
 	# --- MANEJO DEL COYOTE TIME ---
 	# Si acaba de dejar el suelo (transición de piso a aire)
