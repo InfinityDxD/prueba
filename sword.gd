@@ -1,68 +1,64 @@
-extends CharacterBody2D
+# espada.gd
+extends Node2D
 
-# Referencias
-var player: Node2D
+@export var velocidad_seguimiento: float = 8.0
+@export var distancia_offset: float = 35.0
+@export var velocidad_rotacion: float = 12.0
+@export var altura_offset: float = -20.0
+@export var altura_walljump: float = -60.0  # Más arriba cuando salta de pared
 
-# Parámetros de seguimiento
-@export var follow_smooth: float = 0.12
-
-# Parámetros de rotación
-@export var rotation_speed: float = 8.0
-@export var max_rotation_angle: float = PI
-
-# Estado
-var target_position: Vector2
-var last_player_direction: float = 0.0
-var target_rotation: float = 0.0
-var is_player_in_air: bool = false
-var rotation_active: bool = false
+var jugador: Node2D
+var velocidad_jugador: Vector2 = Vector2.ZERO
+var posicion_anterior: Vector2 = Vector2.ZERO
 
 func _ready() -> void:
-	player = get_parent().get_node("player")
+	jugador = get_node_or_null("../player/CharacterBody2D")
 	
-	if not player:
-		push_error("No se encontró nodo 'player' en la escena padre.")
-		return
-	
-	target_position = global_position
-	target_rotation = rotation
+	if not jugador:
+		push_error("ERROR: No encontré el jugador en ../player")
+	else:
+		print("✓ Jugador encontrado: ", jugador.name)
+		posicion_anterior = jugador.global_position
 
 func _process(delta: float) -> void:
-	if not player:
+	if not jugador:
 		return
 	
-	target_position = player.global_position
-	global_position = global_position.lerp(target_position, follow_smooth)
+	# Calcular velocidad del jugador
+	velocidad_jugador = jugador.global_position - posicion_anterior
+	posicion_anterior = jugador.global_position
 	
-	_update_player_state()
-	_update_rotation(delta)
-
-func _update_player_state() -> void:
-	var player_velocity = player.velocity
+	# === DETECTAR ESTADO DEL JUGADOR ===
+	var en_pared = jugador.is_on_wall() if "is_on_wall" in jugador else false
+	var en_suelo = jugador.is_on_floor() if "is_on_floor" in jugador else false
+	var velocidad_horizontal = abs(velocidad_jugador.x)
 	
-	is_player_in_air = not player.is_on_floor()
+	# === LÓGICA DE POSICIÓN ===
+	var offset_x: float
+	var offset_y: float
 	
-	var current_direction: float = 0.0
-	if player_velocity.x > 0.1:
-		current_direction = 1.0
-	elif player_velocity.x < -0.1:
-		current_direction = -1.0
+	# Si está en wall jump o saltando desde pared
+	if en_pared and not en_suelo:
+		offset_x = 0  # Centro
+		offset_y = altura_walljump  # Más arriba
+	# Si NO se mueve horizontalmente
+	elif velocidad_horizontal < 1.0:  # Umbral para "no se mueve"
+		offset_x = 0  # Arriba en el centro
+		offset_y = altura_offset
+	# Sistema NIER normal: lado opuesto al movimiento
+	else:
+		var direccion_movimiento = sign(velocidad_jugador.x)
+		offset_x = -distancia_offset * direccion_movimiento
+		offset_y = altura_offset
 	
-	if current_direction != 0.0 and current_direction != last_player_direction:
-		rotation_active = true
-		target_rotation = max_rotation_angle if current_direction > 0 else -max_rotation_angle
-		last_player_direction = current_direction
+	var posicion_objetivo = jugador.global_position + Vector2(offset_x, offset_y)
 	
-	if is_player_in_air:
-		rotation_active = true
-
-func _update_rotation(delta: float) -> void:
-	if rotation_active:
-		rotation = lerp_angle(rotation, target_rotation, rotation_speed * delta)
-		
-		if abs(rotation - target_rotation) < 0.05 and not is_player_in_air:
-			rotation = target_rotation
-			rotation_active = false
-
-func _physics_process(_delta: float) -> void:
-	pass
+	# POSICIÓN - sigue constantemente
+	global_position = global_position.lerp(posicion_objetivo, velocidad_seguimiento * delta)
+	
+	# ROTACIÓN - rota hacia la posición objetivo
+	var direccion_rotacion = (posicion_objetivo - global_position).angle()
+	rotation = lerp_angle(rotation, direccion_rotacion, velocidad_rotacion * delta)
+	
+	# Debug
+	print("Estado: Pared=", en_pared, " Suelo=", en_suelo, " VelX=", velocidad_horizontal, " OffsetX=", offset_x)
