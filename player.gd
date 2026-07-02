@@ -32,7 +32,7 @@ func _physics_process(delta: float) -> void:
 	var did_jump = false
 	
 	# --- LÓGICA DE SALTO ---
-	if Input.is_action_just_pressed("ui_select"):
+	if Input.is_action_just_pressed("ui_up"):
 		# Salta si está en el suelo O si el coyote time está disponible
 		if is_on_floor() or coyote_time_remaining > 0:
 			velocity.y = JUMP_VELOCITY
