@@ -1,13 +1,15 @@
 [gd_scene format=3 uid="uid://c2vbutmjocjgg"]
 
+[ext_resource type="Script" uid="uid://bol6hyg4f28jr" path="res://enemy.gd" id="1_4gyqm"]
 [ext_resource type="Texture2D" uid="uid://5a5v4g84l2vw" path="res://assets/sprites/enemy.png" id="1_7k104"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7xaro"]
-size = Vector2(14, 14)
+size = Vector2(16, 16)
 
 [node name="Enemy" type="Node2D" unique_id=696544202]
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=1088135954]
+script = ExtResource("1_4gyqm")
 
 [node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D" unique_id=2119821679]
 texture_filter = 1
@@ -15,3 +17,11 @@ texture = ExtResource("1_7k104")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=980797652]
 shape = SubResource("RectangleShape2D_7xaro")
+
+[node name="RayCast2D" type="RayCast2D" parent="." unique_id=2006247140]
+rotation = -0.0024547884
+target_position = Vector2(-50, 0)
+
+[node name="RayCast2D2" type="RayCast2D" parent="." unique_id=107853867]
+rotation = 3.1305006
+target_position = Vector2(-50, 0)
