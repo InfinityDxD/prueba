@@ -6,8 +6,8 @@ extends CharacterBody2D
 @export var detection_range: float = 150.0  ## Distancia a la que empieza a perseguir al player
 
 ## --- Referencias a nodos ---
-@onready var raycast_left: RayCast2D = $"../RayCast2D Left side"
-@onready var raycast_right: RayCast2D = $"../RayCast2D2 Right Side"
+@onready var raycast_left: RayCast2D = $"RayCast2D Left side"
+@onready var raycast_right: RayCast2D = $"RayCast2D2 Right Side"
 @onready var sprite: Sprite2D = $Sprite2D
 
 ## --- Estado interno ---
@@ -30,6 +30,12 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	# Gravedad
+	# El player debe estar en el grupo "player" (Nodo -> Grupos -> agregar "player")
+	player = get_tree().get_first_node_in_group("player")
+	if player == null:
+		print("ADVERTENCIA: no se encontró ningún nodo en el grupo 'player'")
+	else:
+		print("Player encontrado: ", player.name)
 	if not is_on_floor():
 		velocity.y += gravity * delta
 	else:
@@ -39,8 +45,11 @@ func _physics_process(delta: float) -> void:
 		turn_cooldown -= delta
 
 	if player and global_position.distance_to(player.global_position) < detection_range:
+		print("PERSIGUIENDO - distancia: ", global_position.distance_to(player.global_position))
 		_chase_player()
 	else:
+		if player:
+			print("patrullando - distancia: ", global_position.distance_to(player.global_position))
 		_patrol()
 
 	move_and_slide()
@@ -52,6 +61,10 @@ func _chase_player() -> void:
 		direction = 1
 
 	var front_ray: RayCast2D = raycast_right if direction > 0 else raycast_left
+	var lado := "DERECHA" if direction > 0 else "IZQUIERDA"
+	var detecta_player := front_ray.is_colliding() and front_ray.get_collider() == player
+	print("Player está a la ", lado, " | raycast frontal detecta player: ", detecta_player)
+
 	if front_ray.is_colliding() and _is_wall(front_ray.get_collider()):
 		velocity.x = 0
 	else:
@@ -78,8 +91,12 @@ func _patrol() -> void:
 
 func _is_wall(collider: Object) -> bool:
 	# Si tenés capas separadas para "pared" podés filtrar acá por collision_layer.
-	# Por ahora asumimos que cualquier cosa que choque el raycast horizontal es pared.
-	return collider != null
+	# El player NO cuenta como pared, o el enemigo se frenaría al detectarlo.
+	if collider == null:
+		return false
+	if collider == player:
+		return false
+	return true
 
 
 func _update_facing() -> void:
