@@ -10,7 +10,7 @@
 [node name="world" parent="." unique_id=271936559 instance=ExtResource("2_6uqi0")]
 
 [node name="player" parent="world" unique_id=797367852 instance=ExtResource("1_8uh7m")]
-position = Vector2(170, 379)
+position = Vector2(704, 625)
 
 [node name="sword" parent="world" unique_id=8459676 instance=ExtResource("3_6uqi0")]
 position = Vector2(-63, 108)

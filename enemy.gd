@@ -55,15 +55,19 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 
+@export var stop_distance: float = 20.0  ## Distancia mínima antes de dejar de perseguir/acercarse
+
 func _chase_player() -> void:
-	direction = sign(player.global_position.x - global_position.x)
-	if direction == 0:
-		direction = 1
+	var dist_x: float = player.global_position.x - global_position.x
+
+	# Si ya estamos lo bastante cerca en X, no seguimos empujando el movimiento
+	if abs(dist_x) < stop_distance:
+		velocity.x = 0
+		return
+
+	direction = sign(dist_x)
 
 	var front_ray: RayCast2D = raycast_right if direction > 0 else raycast_left
-	var lado := "DERECHA" if direction > 0 else "IZQUIERDA"
-	var detecta_player := front_ray.is_colliding() and front_ray.get_collider() == player
-	print("Player está a la ", lado, " | raycast frontal detecta player: ", detecta_player)
 
 	if front_ray.is_colliding() and _is_wall(front_ray.get_collider()):
 		velocity.x = 0
@@ -71,6 +75,7 @@ func _chase_player() -> void:
 		velocity.x = direction * speed
 
 	_update_facing()
+
 
 
 func _patrol() -> void:
