@@ -12,6 +12,21 @@ Juego 2D simple con un jugador, un enemigo y una espada móvil. El proyecto incl
 - `world.tscn`: escena principal del nivel que instancia al jugador, la espada y el enemigo.
 - `test.tscn`: escena de ejecución configurada como escena principal del proyecto.
 
+## Cambios recientes
+
+- Fecha: 2026-07-13
+- Se corrigió un problema en `player.tscn`: el grupo `player` se movió del nodo raíz `Node2D` al `CharacterBody2D` para que el enemigo siga la posición móvil correcta del jugador.
+
+## Herramientas utilizadas
+
+- Godot Engine 4.7
+- GDScript para la lógica de juego
+- `CharacterBody2D` para movimiento con físicas 2D
+- `Sprite2D` y `CollisionShape2D` para render y colisiones
+- `RayCast2D` para detección de bordes y seguimiento del jugador
+- `TileMapLayer` y `TileSet` para construir el escenario
+- `Input Map` para controlar entradas como `ui_left`, `ui_right`, `ui_up` y `ui_accept`
+
 ## Estructura del proyecto
 
 - `project.godot`: configuración del proyecto.
