@@ -10,7 +10,7 @@
 [node name="world" parent="." unique_id=271936559 instance=ExtResource("2_6uqi0")]
 
 [node name="player" parent="world" unique_id=797367852 instance=ExtResource("1_8uh7m")]
-position = Vector2(704, 625)
+position = Vector2(34, 572)
 
 [node name="sword" parent="world" unique_id=8459676 instance=ExtResource("3_6uqi0")]
 position = Vector2(-63, 108)
@@ -18,4 +18,10 @@ distancia_espadazo_parado = 80.0
 distancia_espadazo_moviendo = 240.0
 
 [node name="Enemy" parent="world" unique_id=696544202 instance=ExtResource("4_ppyta")]
-position = Vector2(815, 617)
+position = Vector2(293, 563)
+
+[node name="Enemy2" parent="world" unique_id=258403985 instance=ExtResource("4_ppyta")]
+position = Vector2(447, 524)
+
+[node name="Enemy3" parent="world" unique_id=573054265 instance=ExtResource("4_ppyta")]
+position = Vector2(592, 468)

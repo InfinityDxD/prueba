@@ -4,6 +4,7 @@ extends CharacterBody2D
 @export var speed: float = 80.0
 @export var gravity: float = 900.0
 @export var detection_range: float = 150.0  ## Distancia a la que empieza a perseguir al player
+@export var stop_distance: float = -10.0  ## Distancia mínima antes de dejar de perseguir/acercarse
 
 ## --- Referencias a nodos ---
 @onready var raycast_left: RayCast2D = $"RayCast2D Left side"
@@ -21,6 +22,7 @@ var turn_cooldown: float = 0.0
 
 func _ready() -> void:
 	# El player debe estar en el grupo "player" (Nodo -> Grupos -> agregar "player")
+	# IMPORTANTE: el grupo debe estar en el CharacterBody2D que se mueve, no en un Node2D contenedor
 	player = get_tree().get_first_node_in_group("player")
 	if player == null:
 		print("ADVERTENCIA: no se encontró ningún nodo en el grupo 'player'")
@@ -29,13 +31,6 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	# Gravedad
-	# El player debe estar en el grupo "player" (Nodo -> Grupos -> agregar "player")
-	player = get_tree().get_first_node_in_group("player")
-	if player == null:
-		print("ADVERTENCIA: no se encontró ningún nodo en el grupo 'player'")
-	else:
-		print("Player encontrado: ", player.name)
 	if not is_on_floor():
 		velocity.y += gravity * delta
 	else:
@@ -45,17 +40,13 @@ func _physics_process(delta: float) -> void:
 		turn_cooldown -= delta
 
 	if player and global_position.distance_to(player.global_position) < detection_range:
-		print("PERSIGUIENDO - distancia: ", global_position.distance_to(player.global_position))
 		_chase_player()
 	else:
-		if player:
-			print("patrullando - distancia: ", global_position.distance_to(player.global_position))
 		_patrol()
 
 	move_and_slide()
+	_check_player_collision()
 
-
-@export var stop_distance: float = 20.0  ## Distancia mínima antes de dejar de perseguir/acercarse
 
 func _chase_player() -> void:
 	var dist_x: float = player.global_position.x - global_position.x
@@ -75,7 +66,6 @@ func _chase_player() -> void:
 		velocity.x = direction * speed
 
 	_update_facing()
-
 
 
 func _patrol() -> void:
@@ -108,3 +98,16 @@ func _update_facing() -> void:
 	sprite.flip_h = direction < 0
 	# Si usás RayCast2D con target_position fijo, no hace falta rotarlos:
 	# alcanza con que sus posiciones ya estén a izquierda y derecha del enemigo.
+
+
+## --- Detección de "toque" con el jugador ---
+func _check_player_collision() -> void:
+	for i in get_slide_collision_count():
+		var collision := get_slide_collision(i)
+		if collision.get_collider() == player:
+			_catch_player()
+
+
+func _catch_player() -> void:
+	print("¡El enemigo atrapó al jugador! Cerrando el juego...")
+	get_tree().quit()

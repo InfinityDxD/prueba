@@ -9,7 +9,9 @@ size = Vector2(14, 14)
 [node name="Enemy" type="Node2D" unique_id=696544202]
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=1088135954]
+position = Vector2(1, -3)
 script = ExtResource("1_4gyqm")
+detection_range = 100.0
 
 [node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D" unique_id=2119821679]
 texture_filter = 1
