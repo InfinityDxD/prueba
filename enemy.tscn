@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://5a5v4g84l2vw" path="res://assets/sprites/enemy.png" id="1_7k104"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7xaro"]
-size = Vector2(16, 16)
+size = Vector2(14, 14)
 
 [node name="Enemy" type="Node2D" unique_id=696544202]
 
