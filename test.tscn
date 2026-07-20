@@ -4,6 +4,10 @@
 [ext_resource type="PackedScene" uid="uid://bo5u5gb7jx6jh" path="res://world.tscn" id="2_6uqi0"]
 [ext_resource type="PackedScene" uid="uid://rt6rvvxa1lwd" path="res://sword.tscn" id="3_6uqi0"]
 [ext_resource type="PackedScene" uid="uid://c2vbutmjocjgg" path="res://enemy.tscn" id="4_ppyta"]
+[ext_resource type="Script" uid="uid://vunslnt5tqjk" path="res://end.gd" id="5_ykrsh"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_d8xdn"]
+size = Vector2(48, 44)
 
 [node name="test" type="Node" unique_id=1373848828]
 
@@ -25,3 +29,12 @@ position = Vector2(447, 524)
 
 [node name="Enemy3" parent="world" unique_id=573054265 instance=ExtResource("4_ppyta")]
 position = Vector2(592, 468)
+
+[node name="End" type="Area2D" parent="world" unique_id=1287317747]
+position = Vector2(929, 297)
+script = ExtResource("5_ykrsh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="world/End" unique_id=470950161]
+shape = SubResource("RectangleShape2D_d8xdn")
+
+[connection signal="body_entered" from="world/End" to="world/End" method="_on_body_entered"]
